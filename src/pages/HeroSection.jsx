@@ -52,7 +52,7 @@ const HeroSection = () => {
   const [currentShoeIndex, setCurrentShoeIndex] = useState(0); // Store the index of the selected shoe
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [introCompleted, setIntroCompleted] = useState(false);
-
+  const [imageLoaded, setImageLoaded] = useState(false);
   // Handle color change
   const handleColorChange = (index) => {
     setSelectedColorIndex(index);
@@ -69,7 +69,10 @@ const HeroSection = () => {
   // Access the current shoe using the index
   const currentShoe = shoes[currentShoeIndex];
   
-
+  useEffect(() => {
+    setImageLoaded(false); // Reset when shoe or color changes
+  }, [currentShoeIndex, selectedColorIndex]);
+  
   return (
     <section className="relative w-full  flex flex-col items-center text-white px-6 md:px-20">
       {/* Main Content */}
@@ -175,29 +178,24 @@ const HeroSection = () => {
          transition={{ repeat: Infinity ,duration:3 , type:"tween"}}
         className="flex-1 w-9/12 flex-row h-fit py-60 flex justify-end relative">
         
-          <motion.img
-            key={currentShoe.images[selectedColorIndex]}
-            src={currentShoe.images[selectedColorIndex]}
-            alt={currentShoe.name}
-            className="w-6/12 min-w-96 top-10 h-auto dropshadow absolute object-contain"
-            style={{
-              filter: `drop-shadow(${
-                introCompleted ? "-24px -3px 5px #000000" : "0px 0px 0px rgba(0, 0, 0, 0)"
-              }), drop-shadow(${
-                introCompleted ? "0px 0px 10px rgba(0, 0, 0, 0.5)" : "0px 0px 0px rgba(0, 0, 0, 0)"
-              })`,
-            }}
-            initial={
-              introCompleted ? { opacity: 0, x:120, rotateZ: -60 } : { scale: 0.8, x: 600, opacity: 0, rotateZ: 0 }
-            }
-            animate={
-              introCompleted
-                ? { opacity: 1,x:0, rotateZ: -60 }
-                : { scale: 1, x: 0, opacity: 1, rotateZ: [-75, -75, -75, -60] }
-            }
-            exit={{ opacity: 0 }}
-            transition={{ duration: introCompleted ? 0.5 : 1.2, ease: "easeInOut" ,loop: introCompleted ? Infinity : 0,}}
-          />
+        <motion.img
+  key={`${currentShoeIndex}-${selectedColorIndex}`} // Ensures remount
+  src={currentShoe.images[selectedColorIndex]}
+  alt={currentShoe.name}
+  className="w-6/12 min-w-96 top-10 h-auto dropshadow absolute object-contain"
+  style={{
+    filter: `drop-shadow(${
+      imageLoaded ? "-24px -3px 5px #000000" : "0px 0px 0px rgba(0, 0, 0, 0)"
+    }), drop-shadow(${
+      imageLoaded ? "0px 0px 10px rgba(0, 0, 0, 0.5)" : "0px 0px 0px rgba(0, 0, 0, 0)"
+    })`,
+  }}
+  initial={{ opacity: 0, x: 120, rotateZ: -60 }}
+  animate={{ opacity: imageLoaded ? 1 : 0, x: imageLoaded ? 0 : 120, rotateZ: -60 }}
+  exit={{ opacity: 0 }}
+  transition={{ duration: 0.5, ease: "easeInOut" }}
+  onLoad={() => setImageLoaded(true)} // Set true only when fully loaded
+/>
 
         </motion.div>
         <motion.img 
