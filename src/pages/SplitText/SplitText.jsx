@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 const SplitText = ({
   text = '',
   className = '',
-  delay = 100,
+  delay = 0,
   animationFrom = { opacity: 0, transform: 'translate3d(0,40px,0)' },
   animationTo = { opacity: 1, transform: 'translate3d(0,0,0)' },
   easing = 'easeOutCubic',
-  threshold = 0.1,
+  threshold = 0,
   rootMargin = '-100px',
   textAlign = 'center',
   onLetterAnimationComplete,
