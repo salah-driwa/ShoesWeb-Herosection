@@ -53,7 +53,7 @@ const HeroSection = ({Setloading}) => {
   const [currentShoeIndex, setCurrentShoeIndex] = useState(0); // Store the index of the selected shoe
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [introCompleted, setIntroCompleted] = useState(false);
-  const [, setImageLoaded] = useState(false);
+  const [ImageLoaded, setImageLoaded] = useState(false);
   // Handle color change
   const handleColorChange = (index) => {
     setSelectedColorIndex(index);
@@ -63,7 +63,7 @@ const HeroSection = ({Setloading}) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIntroCompleted(true);
-    }, 2200); // 3 seconds intro duration
+    }, 1500); // 3 seconds intro duration
     return () => clearTimeout(timer);
   }, []);
 
@@ -180,7 +180,7 @@ const HeroSection = ({Setloading}) => {
         className="flex-1 w-9/12 flex-row h-fit py-60 flex justify-end relative">
         
         <motion.img
-  key={`${currentShoeIndex}-${selectedColorIndex}-${introCompleted}`} // Ensures remount
+  key={`${currentShoeIndex}-${selectedColorIndex}`} // Ensures remount
   src={currentShoe.images[selectedColorIndex]}
   alt={currentShoe.name}
   className="w-6/12 min-w-96 top-10 h-auto dropshadow absolute object-contain"
@@ -199,8 +199,8 @@ initial={
 }
 animate={
   introCompleted
-    ? { opacity: 1,x:0, rotateZ: -60 }
-    : { scale: 1, x: 0, opacity: 1, rotateZ: [-75, -75, -75, -60] }
+    ? { opacity: 1,x:0, rotateZ: -60 ,scale:1 }
+    : { scale: 1, x: 500, opacity: 0, rotateZ: [-75, -75, -75, -60],  transition:{duration:1}}
 }
 exit={{ opacity: 0 }}
 transition={{ duration: 0.5, ease: "easeInOut" }}
