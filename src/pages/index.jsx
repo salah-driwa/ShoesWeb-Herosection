@@ -5,18 +5,28 @@ import HeroSection from "./HeroSection";
 import RiveLoader from "./RiveLoader";
 
 const Index = () => {
-  // Track if assets have loaded
+  // Track if assets have loaded (set from HeroSection)
   const [assetsLoaded, setAssetsLoaded] = useState(false);
-  // Track if the minimum duration has elapsed
+  // Track if the minimum duration has elapsed (for example, 1000ms)
   const [minDurationElapsed, setMinDurationElapsed] = useState(false);
   // Final loading state
   const [isLoading, setIsLoading] = useState(true);
+  // Delay the rendering of HeroSection by 1 second
+  const [startRendering, setStartRendering] = useState(false);
 
-  // Start the minimum duration timer (3000ms)
+  // Start the minimum duration timer (1 second in this case)
   useEffect(() => {
     const timer = setTimeout(() => {
       setMinDurationElapsed(true);
     }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Delay rendering of HeroSection by 1 second
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setStartRendering(true);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -38,14 +48,16 @@ const Index = () => {
       >
         <div className="nike-bg-text">Nike</div>
         <Navbar />
-        {/* Pass a callback to HeroSection that signals assets have loaded */}
-        <HeroSection Setloading={() => setAssetsLoaded(true)} />
+        {/* Only render HeroSection after a 1s delay */}
+        {startRendering && (
+          <HeroSection Setloading={() => setAssetsLoaded(true)} />
+        )}
       </motion.div>
 
       {/* Loader Overlay */}
       {isLoading && (
         <div className="absolute inset-0 z-20">
-          <RiveLoader duration={1000} />
+          <RiveLoader duration={3000} />
         </div>
       )}
     </div>
